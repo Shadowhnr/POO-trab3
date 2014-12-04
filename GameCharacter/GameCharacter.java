@@ -5,7 +5,7 @@ import Items.*;
 
 
 
-public class GameCharacter {
+public abstract class GameCharacter {
 		/** (string) nome do character*/
 		private String Alias; 
 		/** (int) HP do character (vida)*/
@@ -34,20 +34,13 @@ public class GameCharacter {
 		protected int constitution;
 		/** (int) valor total de todos os atributos do character*/
 		protected int attributes;
-
-
-		public void removeItem(int itemNum) {
-			myitems.removeItem(itemNum);
-		}
-
-		public void removeItem(String itemName) {
-			myitems.removeItem(itemName);
-		}
-
-		public void insertItem(Item item) {
-			myitems.insertItem(item);
-		}
-
+		
+		/**
+		 * @brief construtor do character
+		 * Inicializa os atributos do character, estes incluem o inventário.
+		 * Define alguns atributos aleatóriamente (para facilitar os testes) 
+		 * @param Alias (string) nome do character
+		 */
 		public GameCharacter(String Alias) {
 			ran.setSeed(System.currentTimeMillis());
 			this.Alias = Alias;
@@ -56,7 +49,6 @@ public class GameCharacter {
 			HP = 100;
 			MAX_XP = 100;
 			MAX_MP = 100;
-			//inicializa randomicamente alguns atributos
 			XP = 1 + ran.nextInt(99);
 			strenght = 1 + ran.nextInt(24);
 			speed = 1 + ran.nextInt(24);
@@ -65,56 +57,98 @@ public class GameCharacter {
 			attributes -= (strenght + speed + dexterity + constitution);
 		}
 
+		/**
+		 * @brief retorna o nome do personagem
+		 * @return (string) nome do character
+		 */
 		public String getName() {
 			return Alias;
 		}
-
+		
+		/**
+		 * @brief calcula os pontos de defesa padrão do character a partir de seus atributos
+		 * @return (int) pontos de defesa
+		 */
+		
 		protected int defensePoints() {
 			Double defPnts;
 			defPnts = ((XP) * (constitution * 0.5 + dexterity * 0.3 + getSpeed() * 0.2 + myitems.getAllDefensePoints()) / 2);
 			return defPnts.intValue();
 		}
-
+		
+		/**
+		 * @brief retorna os pontos de ataque padrão do character a partir de seus atributos
+		 * @return (int) pontos de ataque
+		 */
 		protected int attackPoints() {
 			Double attPnts;
 			attPnts = ((XP) * (strenght * 0.5 + dexterity * 0.3 + getSpeed() * 0.2 + myitems.getAllAttackPoints()) / 3);
 			return attPnts.intValue();
 		}
+		/**
+		 * @brief método abstrato para calcular os pontos de ataque de cada classe derivada, como varia de classe para classe
+		 * portanto a solução foi coloca-la como abstrata
+		 * @return (int) pontos de ataque totais do character
+		 */
+		abstract int getAttackPoints();
+		/**
+		 * @brief método abstrato para calcular os pontos de defesa de cada classe derivada, como varia de classe para classe
+		 * portanto a solução foi coloca-la como abstrata
+		 * @return (int) pontos de defesa do personagem
+		 */
+		abstract int getDefensePoints();
 
-		protected int getAttackPoints() {
-			return 0;
-		}
-
-		protected int getDefensePoints() {
-			return 0;
-		}
-
+		/**
+		 * @brief adiciona XP ao character. Verifica se o valor é permitido, caso contrário retorna mensagem de erro.
+		 * @param XPa (int) XP a ser adicionado
+		 */
 		public void addXP(int XPa) {
-			if(XPa > 0 && XP + XPa <= MAX_XP)
+			try{
+				if(!(XPa > 0 && XP + XPa <= MAX_XP)){
+					throw new NotAllowedValue();
+				}
 				XP += XPa;
-			else
-				System.out.println("Error: Não foi possivel adicionar XP");
+				System.out.println("SUCESS: Character::addXP(): XP atual: " + XP);
+			}catch(NotAllowedValue e){
+				System.err.printf("ERROR: GameCharacter::addXP(String, int): %s\n", e.getMessage());
+			}
 		}
 
+		/**
+		 * @brief adicona HP ao personagem, caso o HP seja maior que o permitido, carrega o valor máximo permitido
+		 * @param restorepts (int) pontos de restauração do personagem, pode ser negativo.
+		 */
 		public void addHP(int restorepts) {
 			if(HP + restorepts > MAX_HP) {
 				HP = MAX_HP;
 			} else {
 				HP += restorepts;
+				if(HP < 0){
+					HP = 0;
+				}
 			}
 			System.out.println("SUCESS: Character::addHP(): HP atual: " + HP);
 		}
-
+		/**
+		 * @brief adicona MP ao personagem, caso o MP seja maior que o permitido, carrega o valor máximo permitido
+		 * @param restorepts (int) pontos de restauração do personagem, pode ser negativo.
+		 */
 		public void addMP(int restorepts) {
 			if(MP + restorepts > MAX_MP) {
 				HP = MAX_MP;
 			} else {
 				MP += restorepts;
+				if(MP < 0){
+					MP = 0;
+				}
 			}
 			System.out.println("SUCESS: Character::addMP(): MP atual: " + MP);
 		}
 
-
+		/**
+		 * @brief
+		 * @param newStrenght
+		 */
 		public void setStrenght(int newStrenght) {
 			if(attributes + strenght >= newStrenght && newStrenght > 0) {
 				attributes = attributes + strenght - newStrenght;
@@ -206,6 +240,18 @@ public class GameCharacter {
 			Double x;
 			x = speed * java.lang.Math.exp(-(myitems.getWeight() * myitems.getWeight()) / 20.0);
 			return x.intValue();
+		}
+
+		public void removeItem(int itemNum) {
+			myitems.removeItem(itemNum);
+		}
+
+		public void removeItem(String itemName) {
+			myitems.removeItem(itemName);
+		}
+
+		public void insertItem(Item item) {
+			myitems.insertItem(item);
 		}
 		
 		//chama as funcoes do inventorio
