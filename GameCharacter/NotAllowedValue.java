@@ -1,9 +1,8 @@
-import java.util.*;
-import java.io.*;
+package GameCharacter;
 
 public class NotAllowedValue extends RuntimeException{
-	
-	public ValorMenorQueZeroException(){
+
+	public NotAllowedValue(){
 
 		super("Valor não permitido");
 	}
