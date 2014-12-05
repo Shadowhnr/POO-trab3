@@ -108,7 +108,7 @@ public abstract class GameCharacter {
 					throw new NotAllowedValue();
 				}
 				XP += XPa;
-				System.out.println("SUCESS: Character::addXP(): XP atual: " + XP);
+				System.out.println("SUCESS: GameCharacter::addXP(): XP atual: " + XP);
 			}catch(NotAllowedValue e){
 				System.err.printf("ERROR: GameCharacter::addXP(String, int): %s\n", e.getMessage());
 			}
@@ -127,7 +127,7 @@ public abstract class GameCharacter {
 					HP = 0;
 				}
 			}
-			System.out.println("SUCESS: Character::addHP(): HP atual: " + HP);
+			System.out.println("SUCESS: GameCharacter::addHP(): HP atual: " + HP);
 		}
 		/**
 		 * @brief adicona MP ao personagem, caso o MP seja maior que o permitido, carrega o valor máximo permitido
@@ -142,68 +142,109 @@ public abstract class GameCharacter {
 					MP = 0;
 				}
 			}
-			System.out.println("SUCESS: Character::addMP(): MP atual: " + MP);
+			System.out.println("SUCESS: GameCharacter::addMP(): MP atual: " + MP);
 		}
 
 		/**
-		 * @brief
-		 * @param newStrenght
+		 * @brief setter para strenght, verifica se é possivel modificar, senão retorna mensagem de erro 
+		 * @param newStrenght (int) nova strenght
 		 */
 		public void setStrenght(int newStrenght) {
-			if(attributes + strenght >= newStrenght && newStrenght > 0) {
+			try{
+				if(!(attributes + strenght >= newStrenght && newStrenght > 0)){
+					throw new NotAllowedValue();
+				}
 				attributes = attributes + strenght - newStrenght;
 				strenght = newStrenght;
-			} else
-				System.out.println("Error: Não foi possivel modificar Strenght");
+				System.out.println("SUCESS: GameCharacter::setStrenght(): strenght: " + strenght);
+			}catch(NotAllowedValue e){
+				System.err.printf("ERROR: GameCharacter::setStrenght (int): %s\n", e.getMessage());
+			}
 		}
-
+		/**
+		 * @brief setter para speed, verifica se é possivel modificar, senão retorna mensagem de erro 
+		 * @param newSpeed (int) nova speed
+		 */
 		public void setSpeed(int newSpeed) {
-			if(attributes + speed >= newSpeed && newSpeed > 0) {
+			try{
+				if(!(attributes + speed >= newSpeed && newSpeed > 0)) {
+					throw new NotAllowedValue();
+				}
 				attributes = attributes + speed - newSpeed;
 				speed = newSpeed;
-			} else
-				System.out.println("Error: Não foi possivel modificar Speed");
+				System.out.println("SUCESS: GameCharacter::setSpeed(): speed: " + speed);
+			}catch(NotAllowedValue e){
+				System.err.printf("ERROR: GameCharacter::setSpeed (int): %s\n", e.getMessage());
+			}
 		}
-
+		/**
+		 * @brief setter para dexterity, verifica se é possivel modificar, senão retorna mensagem de erro 
+		 * @param newDexterity (int) nova dexterity
+		 */
 		public void setDexterity(int newDexterity) {
-			if(attributes + dexterity >= newDexterity && newDexterity > 0) {
+			try{
+				if(!(attributes + dexterity >= newDexterity && newDexterity > 0)) {
+					throw new NotAllowedValue();
+				}
 				attributes = attributes + dexterity - newDexterity;
 				dexterity = newDexterity;
-			} else
-				System.out.println("Error: Não foi possivel modificar dexterity");
+				System.out.println("SUCESS: GameCharacter::setDexterity(): dexterity: " + dexterity);
+			}catch(NotAllowedValue e){
+				System.err.printf("ERROR: GameCharacter::setDexterity (int): %s\n", e.getMessage());
+			}
 		}
-
+		/**
+		 * @brief setter para constitution, verifica se é possivel modificar, senão retorna mensagem de erro 
+		 * @param newConstitution (int) nova constitution
+		 */
 		public void setConstitution(int newConstitution) {
-			if(attributes + constitution >= newConstitution && newConstitution > 0) {
+			try{
+				if(!(attributes + constitution >= newConstitution && newConstitution > 0)) {
+					throw new NotAllowedValue();
+				}
 				attributes = attributes + constitution - newConstitution;
 				constitution = newConstitution;
-			} else
-				System.out.println("Error: Não foi possivel modificar Constitution");
+				System.out.println("SUCESS: GameCharacter::setConstitution(): constitution: " + constitution);
+			}catch(NotAllowedValue e){
+				System.err.printf("ERROR: GameCharacter::setConstitution (int): %s\n", e.getMessage());
+			}
 		}
-
+		/**
+		 * @brief
+		 * @param enemie (GameCharacter) character inimigo a receber o dano
+		 */
 		public void attack(GameCharacter enemie) {
+			/** armazena o valor do dano a ser recebido após os cálculos*/
 			int HPLost = 0;
+			
+			/** verifica se o character que vai atacar está vivo */
 			if(getHP() == 0) {
 				System.out.println("INFO: " + Alias + " não está vivo");
 				return;
 			}
+			/** verifica se o character que vai ser atacado está vivo */
 			if(enemie.getHP() == 0) {
 				System.out.println("INFO: " + enemie.getName() + " não está vivo");
 				return;
 			}
 			System.out.println("INFO: " + Alias + " ataca " + enemie.getName());
+			/** probabilidade de o ataque dar miss */
 			if(ran.nextInt(10) < 1) {
 				System.out.println("INFO: Ataque MISS");
 				return;
-			}//Miss
+			}
 			else {
-				HPLost = (this.getAttackPoints() - enemie.getDefensePoints()) + ran.nextInt(11) - 5;	//Dano puro
+				/** calculo do dano puro */
+				HPLost = (this.getAttackPoints() - enemie.getDefensePoints()) + ran.nextInt(11) - 5;
+				/** tratamento do dano negativo */
 				if(HPLost <= 0)
 					HPLost = 1;
+				/** probablilidade do dano ser crítico */
 				if(ran.nextInt(100)*XP < 1) {
 					HPLost = 2 * HPLost;
 					System.out.println("INFO: Ataque Crítico");
-				}//Dano Critico
+				}
+				/** atribuição do dano */
 				if(enemie.HP - HPLost <= 0) {
 					enemie.HP = 0;
 					System.out.println("INFO: " + enemie.getName() + " perdeu " + HPLost + ". HP atual: " + enemie.HP);
@@ -214,7 +255,9 @@ public abstract class GameCharacter {
 				}
 			}
 		}
-
+		/**
+		 * @brief imprime as informações do character
+		 */
 		public void characterInfo() {
 			System.out.println("\n**************************************************\n" +
 							   "CHARACTER INFO\nAlias: " + Alias + "\nHP: " + HP + "\nXP: " + XP + "\nStrenght: " + strenght +
@@ -223,47 +266,84 @@ public abstract class GameCharacter {
 							   "\nCharDefensePoints/CharItemDefensePoints: " + getDefensePoints() + "/" + myitems.getAllDefensePoints() +
 							   "\n**************************************************");
 		}
-
+		/**
+		 * @brief Getter para HP
+		 * @return (int) HP do character
+		 */
 		public int getHP() {
 			return HP;
 		}
-
+		/**
+		 * @brief getter para MP
+		 * @return (int) MP do character
+		 */
 		public int getMP() {
 			return MP;
 		}
-
+		/**
+		 * @brief verifica se o character está vivo
+		 * @return (bool) true para vivo, false para morto
+		 */
 		public boolean isAlive() {
 			return (HP != 0);
 		}
-
+		/**
+		 * @brief retorna a velocidade real do personagem baseada no peso de seu inventário
+		 * @return (int) velocidade real
+		 */
 		public int getSpeed() {
 			Double x;
 			x = speed * java.lang.Math.exp(-(myitems.getWeight() * myitems.getWeight()) / 20.0);
 			return x.intValue();
 		}
 
+		/**
+		 * @brief remove o Item do inventário do personagem (solução encontrada foi chamar a função própria do inventário)
+		 * @param itemNum (int) numero da posição do item a ser removido
+		 */
 		public void removeItem(int itemNum) {
 			myitems.removeItem(itemNum);
 		}
-
+		/**
+		 * @brief remove o Item do inventário do personagem (solução encontrada foi chamar a função própria do inventário)
+		 * @param itemName (string) nome da posição do item a ser removido
+		 */
 		public void removeItem(String itemName) {
 			myitems.removeItem(itemName);
 		}
-
+		/**
+		 * @brief insere o Item do inventário do personagem (solução encontrada foi chamar a função própria do inventário)
+		 * @param item (Item) item a ser inserido
+		 */
 		public void insertItem(Item item) {
 			myitems.insertItem(item);
 		}
 		
-		//chama as funcoes do inventorio
+		/**
+		 * @brief carrega o algum Item que já está no inventório. (inserir o item no inventório não o carrega automaticamente)
+		 * @param itemNum (int) numero do item do inventorio a ser carregado
+		 */
 		public void loadItem(int itemNum) {
 			myitems.loadItem(itemNum);
 		}
+		/**
+		 * @brief carrega o algum Item que já está no inventório. (inserir o item no inventório não o carrega automaticamente)
+		 * @param itemName (string) nome do item do inventório a ser carregado
+		 */
 		public void loadItem(String itemName) {
 			myitems.loadItem(itemName);
 		}
+		/**
+		 * @brief descarrega o algum Item que já está no inventório. (descarregar o item do inventório não o remove automaticamente) 
+		 * @param itemNum (int) numero do item a ser descarregado
+		 */
 		public void unloadItem(int itemNum) {
 			myitems.unloadItem(itemNum);
 		}
+		/**
+		 * @brief descarrega o algum Item que já está no inventório. (descarregar o item do inventório não o remove automaticamente) 
+		 * @param itemNum (string) nome do item a ser descarregado
+		 */
 		public void unloadItem(String itemName) {
 			myitems.unloadItem(itemName);
 		}
