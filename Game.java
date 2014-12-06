@@ -11,6 +11,9 @@ class Game extends Thread {
 
 	public void run() {
 		
+		Random ran = new Random();
+		ran.setSeed(System.currentTimeMillis());
+		
 		/**declaração dos objetos */
 		Team tm1, tm2;
 		Knight kn1, kn2, kn3, kn4;
@@ -151,20 +154,19 @@ class Game extends Thread {
 		tm2.addChar(th2);
 
 		/**batalha e o resultado */
+		
 		System.out.println(tm1.toString());
 		System.out.println(tm2.toString());
 		tm1.battle(tm2);
 		tm1.resolveBattle(tm2);
 		tm2.resolveBattle(tm1);
-		System.out.println("BATALHA: "+ getName());
-		System.out.println(tm1.toString() + "\n" + tm1.getResults());
-		System.out.println(tm2.toString() + "\n" + tm2.getResults());
-
+		System.out.println("#########################\n"+"BATALHA: "+ getName() +"\n"+
+				tm1.toString() + "\n" + tm1.getResults() + "\n"+
+				tm2.toString() + "\n" + tm2.getResults() + "\n"+
+				"#########################");
 	}
 
 	public static void main (String args[]) throws InterruptedException {
-		Random ran = new Random();
-		ran.setSeed(System.currentTimeMillis());
 		
 		Game g0, g1, g2, g3, g4, g5, g6, g7, g8, g9;
 		
