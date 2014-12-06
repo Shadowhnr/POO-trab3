@@ -6,9 +6,11 @@ import GameCharacter.*;
 public class Game {
 
 		public static void main(String[] args) {
+			
 			Random ran = new Random();
 			ran.setSeed(System.currentTimeMillis());
-			//Declaração dos objetos
+			
+			/**declaração dos objetos */
 			Team tm1, tm2;
 			Knight kn1, kn2, kn3, kn4;
 			Thief th1, th2;
@@ -17,7 +19,8 @@ public class Game {
 			Armor a1, a2, a3, a4, a5, a6;
 			HealthPotion hp1, hp2, hp3, hp4, hp5;
 			ManaPotion mp1, mp2, mp3;
-			//Instanciação do itens
+			
+			/** instancição dos objetos */
 			tm1 = new Team("Radiant", Color.green);
 			tm2 = new Team("Dire", Color.red);
 			wp1  = new Weapon("Machado a", 100.0, 1 + ran.nextInt(9), 40.0);
@@ -56,7 +59,7 @@ public class Game {
 			mp2 = new ManaPotion("MP b", 30.0, 30);
 			mp3 = new ManaPotion("MP c", 20.0, 20);
 
-            //Inserindo Itens e carregando
+            /** Inserindo e carregando os itens */
 			kn1.insertItem(a1);
 			kn1.insertItem(a2);
 			kn1.insertItem(wp1);
@@ -146,7 +149,7 @@ public class Game {
 			tm2.addChar(kn4);
 			tm2.addChar(th2);
 
-			//Começando a batalha
+			/**batalha e o resultado */
 			System.out.println(tm1.toString());
 			System.out.println(tm2.toString());
 			tm1.battle(tm2);
