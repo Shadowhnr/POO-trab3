@@ -11,8 +11,8 @@ public class Main
 	public static void main(String args[])
 	{
 			
-		GameCharacter ch1,ch2,ch3,ch4,ch5,ch6,ch7,ch8;
-		Team team_blue,team_red;
+		GameCharacter ch1,ch2,ch3,ch4,ch5,ch6,ch7,ch8,ch9,ch10,ch11,ch12,ch13,ch14,ch15,ch16;
+		Team team_blue,team_red,team_white,team_black;
 		Armor armor_1,armor_2,armor_3,armor_4,armor_5,armor_6;
 		Weapon weapon_1,weapon_2,weapon_3,weapon_4,weapon_5,weapon_6,weapon_7,weapon_8,weapon_9,weapon_10;
 		HealthPotion health_potion_1,health_potion_2,health_potion_3,health_potion_4,health_potion_5;
@@ -23,12 +23,27 @@ public class Main
 			ch2= new Wizard("Brann Richard",20);
 			ch3= new Thief("Hym Turrad",30);	
 			ch4= new Knight("Kan Thusad",10);
+			
 			ch5= new Knight("Keith Yunard",30);
 			ch6= new Wizard("Matt Taron",20);
 			ch7= new Thief("Slavos Stramutsky",30);
 			ch8= new Knight("Oomeru Gyre",10);
+			
+			ch9= new Knight("Lord Byron",30);
+			ch10= new Wizard("Meth Alamine",20);
+			ch11= new Thief("Junior Vandizek",30);	
+			ch12= new Knight("Kal Wor",10);
+			
+			ch13= new Knight("Yu Mei",30);	
+			ch14= new Knight("Trok Mann",30);
+			ch15= new Wizard("Byron Russel",20);
+			ch16= new Thief("Treceny Taylor",30);	
+
+
 			team_blue= new Team("Thusand Warriors",Color.BLUE); 
 			team_red= new Team("Iceland Warriors",Color.RED);
+			team_white= new Team("Onderon Warriors",Color.WHITE);
+			team_black= new Team("Agoge Warriors",Color.BLACK);
 			armor_1= new Armor("leather armor",20.0,5,5.0);
 			armor_2= new Armor("mithril armor",50.0,18,5.0);
 			armor_3= new Armor("wooden armor",5.0,5,10.0);
@@ -104,7 +119,59 @@ public class Main
 			ch8.addToInventory(health_potion_3);
 			ch8.addToInventory(mana_potion_2);
 			ch8.equipWeapon("crossbow");
-			ch8.equipArmor("mithril armor");	
+			ch8.equipArmor("mithril armor");
+			ch9.addToInventory(armor_1);
+			ch9.addToInventory(weapon_1);
+			ch9.addToInventory(weapon_10);
+			ch9.addToInventory(health_potion_1);
+			ch9.addToInventory(mana_potion_1);
+			ch9.equipWeapon("short sword");
+			ch9.equipWeapon("iron axe");
+			ch9.equipArmor("leather armor");
+			ch10.addToInventory(armor_2);			
+			ch10.addToInventory(weapon_2);
+			ch10.addToInventory(health_potion_2);
+			ch10.addToInventory(mana_potion_2);
+			ch10.equipWeapon("rapier");
+			ch10.equipArmor("mithril armor");
+			ch11.addToInventory(health_potion_3);
+			ch11.addToInventory(mana_potion_3);
+			ch11.equipWeapon("steel sword");
+			ch11.equipArmor("wooden armor");
+			ch12.addToInventory(armor_4);
+			ch12.addToInventory(weapon_4);
+			ch12.addToInventory(health_potion_4);
+			ch12.addToInventory(mana_potion_1);
+			ch12.equipWeapon("wooden sword");
+			ch12.equipArmor("steel armor");
+			ch13.addToInventory(armor_5);
+			ch13.addToInventory(weapon_5);
+			ch13.addToInventory(weapon_10);
+			ch13.addToInventory(health_potion_5);
+			ch13.addToInventory(mana_potion_2);
+			ch13.equipWeapon("steel dagger");
+			ch13.equipWeapon("iron axe");
+			ch13.equipArmor("power armor");	
+			ch14.addToInventory(armor_6);
+			ch14.addToInventory(weapon_6);
+			ch14.addToInventory(health_potion_1);
+			ch14.addToInventory(mana_potion_3);
+			ch14.equipWeapon("large rock");
+			ch14.equipArmor("iron armor");	
+			ch15.addToInventory(armor_1);
+			ch15.addToInventory(weapon_7);
+			ch15.addToInventory(health_potion_2);
+			ch15.addToInventory(mana_potion_1);
+			ch15.equipWeapon("iron mace");
+			ch15.equipArmor("leather armor");
+			ch16.addToInventory(armor_2);
+			ch16.addToInventory(weapon_8);
+			ch16.addToInventory(health_potion_3);
+			ch16.addToInventory(mana_potion_2);
+			ch16.equipWeapon("crossbow");
+			ch16.equipArmor("mithril armor");
+	
+	
 			team_blue.addChar(ch1);
 			team_blue.addChar(ch2);
 			team_blue.addChar(ch3);
@@ -113,7 +180,64 @@ public class Main
 			team_red.addChar(ch6);
 			team_red.addChar(ch7);
 			team_red.addChar(ch8);
-			team_blue.resolveBattle(team_red);
+			team_white.addChar(ch9);
+			team_white.addChar(ch10);
+			team_white.addChar(ch11);
+			team_white.addChar(ch12);
+			team_black.addChar(ch13);
+			team_black.addChar(ch14);
+			team_black.addChar(ch15);
+			team_black.addChar(ch16);
+			Battle battle1 = new Battle(team_blue,team_red);
+			Battle battle2 = new Battle(team_white,team_black);	
+			System.out.println("A DeathMatch starts now :");
+			battle1.start();
+			battle2.start();
+			try
+			{
+				battle1.join();
+				battle2.join();
+				System.out.println();
+				System.out.println("The battle between the survivors start:");
+				System.out.println();
+				System.out.println();
+				System.out.println();
+
+				Battle battle3;
+				if(team_blue.getWin()==1)
+				{
+					if(team_white.getWin()==1)
+					{
+						battle3=new Battle(team_blue,team_white);
+						battle3.start();
+					}
+					else
+					{
+						battle3=new Battle(team_blue,team_black);
+						battle3.start();
+					}	
+				}
+				else
+				{
+					if(team_white.getWin()==1)
+					{
+						battle3=new Battle(team_red,team_white);
+						battle3.start();
+					}
+					else
+					{
+						battle3=new Battle(team_red,team_black);
+						battle3.start();
+	
+					}
+				}
+				
+			}
+			catch(InterruptedException e)
+			{
+				System.out.println(e.getMessage());
+			}
+			
 		}
 		catch(InvalidInputException e)
 		{
