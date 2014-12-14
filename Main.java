@@ -198,7 +198,7 @@ public class Main
 				battle1.join();
 				battle2.join();
 				System.out.println();
-				System.out.println("The battle between the survivors start:");
+				System.out.println("The battle between the survivors starts:");
 				System.out.println();
 				System.out.println();
 				System.out.println();
